@@ -92,7 +92,7 @@ struct nf_conn {
 	struct hlist_node	nat_bysource;
 #endif
 	/* all members below initialized via memset */
-	u8 __nfct_init_offset[0];
+
 	/* WIFI MODIFICATION */
 	u32 op_game_skb_len;
 	u32 op_game_detect_status;
@@ -109,6 +109,8 @@ struct nf_conn {
 	s64 op_game_special_rx_pkt_timestamp;
 	s64 op_game_rx_normal_time_record;
 	/* WIFI MODIFICATION */
+
+	struct { } __nfct_init_offset;
 
 	/* If we were expected by an expectation, this will be it */
 	struct nf_conn *master;

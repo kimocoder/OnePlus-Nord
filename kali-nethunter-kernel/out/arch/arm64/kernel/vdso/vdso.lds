@@ -6,7 +6,7 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Linux/arm64 4.19.113 Kernel Configuration
+ * Linux/arm64 4.19.157 Kernel Configuration
  *
  */
 /*
@@ -77,6 +77,11 @@
  * Heavily based on the vDSO linker scripts for other archs.
  */
 
+
+
+
+
+/* SPDX-License-Identifier: GPL-2.0 */
 
 
 
@@ -234,6 +239,7 @@ VERSION
   __kernel_gettimeofday;
   __kernel_clock_gettime;
   __kernel_clock_getres;
+  __kernel_time;
  local: *;
  };
 }

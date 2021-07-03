@@ -10,6 +10,7 @@ deps_config := \
 	mm/Kconfig.debug \
 	lib/Kconfig.debug \
 	lib/fonts/Kconfig \
+	lib/vdso/Kconfig \
 	kernel/dma/Kconfig \
 	lib/xz/Kconfig \
 	lib/Kconfig \
@@ -28,6 +29,7 @@ deps_config := \
 	drivers/crypto/nx/Kconfig \
 	drivers/crypto/caam/Kconfig \
 	drivers/crypto/Kconfig \
+	lib/crypto/Kconfig \
 	crypto/async_tx/Kconfig \
 	crypto/Kconfig \
 	security/Kconfig.hardening \
@@ -170,6 +172,7 @@ deps_config := \
 	drivers/nvmem/Kconfig \
 	drivers/dax/Kconfig \
 	drivers/nvdimm/Kconfig \
+	drivers/gpu/trace/Kconfig \
 	drivers/android/Kconfig \
 	drivers/thunderbolt/Kconfig \
 	arch/x86/ras/Kconfig \
@@ -217,6 +220,7 @@ deps_config := \
 	drivers/ntb/Kconfig \
 	drivers/iio/temperature/Kconfig \
 	drivers/iio/resolver/Kconfig \
+	drivers/iio/proximity/inv_ch101/Kconfig \
 	drivers/iio/proximity/Kconfig \
 	drivers/iio/pressure/Kconfig \
 	drivers/iio/potentiostat/Kconfig \
@@ -266,6 +270,7 @@ deps_config := \
 	drivers/soc/samsung/Kconfig \
 	drivers/soc/rockchip/Kconfig \
 	drivers/soc/renesas/Kconfig \
+	drivers/soc/qcom/wcnss/Kconfig \
 	drivers/soc/qcom/icnss2/Kconfig \
 	drivers/soc/qcom/memshare/Kconfig \
 	drivers/soc/qcom/rmnet_ctl/Kconfig \
@@ -673,6 +678,7 @@ deps_config := \
 	drivers/media/platform/vicodec/Kconfig \
 	drivers/media/platform/vivid/Kconfig \
 	drivers/media/platform/vimc/Kconfig \
+	drivers/media/platform/msm/sde/Kconfig \
 	drivers/media/platform/msm/broadcast/Kconfig \
 	drivers/media/platform/msm/dvb/demux/Kconfig \
 	drivers/media/platform/msm/dvb/Kconfig \
@@ -1010,6 +1016,7 @@ deps_config := \
 	drivers/net/ethernet/dec/tulip/Kconfig \
 	drivers/net/ethernet/dec/Kconfig \
 	drivers/net/ethernet/davicom/Kconfig \
+	drivers/net/ethernet/qcom/Kconfig \
 	drivers/net/ethernet/cortina/Kconfig \
 	drivers/net/ethernet/cisco/enic/Kconfig \
 	drivers/net/ethernet/cisco/Kconfig \
@@ -1091,6 +1098,7 @@ deps_config := \
 	drivers/scsi/libsas/Kconfig \
 	drivers/scsi/Kconfig \
 	drivers/ide/Kconfig \
+	drivers/misc/qrc/Kconfig \
 	drivers/misc/fpr_FingerprintCard/Kconfig \
 	drivers/misc/cardreader/Kconfig \
 	drivers/misc/ocxl/Kconfig \
@@ -1314,7 +1322,7 @@ include/config/auto.conf: \
 ifneq "$(ARCH)" "arm64"
 include/config/auto.conf: FORCE
 endif
-ifneq "$(KERNELVERSION)" "4.19.113"
+ifneq "$(KERNELVERSION)" "4.19.157"
 include/config/auto.conf: FORCE
 endif
 ifneq "$(CC_VERSION_TEXT)" "Android (6207600 based on r377782b) clang version 10.0.4 (https://android.googlesource.com/toolchain/llvm-project 0cb1afdb060d6619a9837ab6866cf4adf2336416)"
@@ -1335,7 +1343,7 @@ endif
 ifneq "$(OBJCOPY)" "/root/android/toolchains/aarch64-4.9/bin/aarch64-linux-android-objcopy"
 include/config/auto.conf: FORCE
 endif
-ifneq "$(CLANG_FLAGS)" "--target=aarch64-linux-gnu --prefix=/root/android/toolchains/aarch64-4.9/bin/ --gcc-toolchain=/root/android/toolchains/aarch64-4.9 -no-integrated-as  -Wno-bool-operation -Werror=unknown-warning-option  -Wno-unsequenced"
+ifneq "$(CLANG_FLAGS)" "--target=aarch64-linux-android --prefix=/root/android/toolchains/aarch64-4.9/bin/aarch64-linux-android- --gcc-toolchain=/root/android/toolchains/aarch64-4.9 -no-integrated-as  -Wno-bool-operation -Werror=unknown-warning-option  -Wno-unsequenced"
 include/config/auto.conf: FORCE
 endif
 ifneq "$(SRCARCH)" "arm64"

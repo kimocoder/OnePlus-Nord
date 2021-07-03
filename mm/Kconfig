@@ -15,7 +15,7 @@ choice
 config FLATMEM_MANUAL
 	bool "Flat Memory"
 	depends on !(ARCH_DISCONTIGMEM_ENABLE || ARCH_SPARSEMEM_ENABLE) || ARCH_FLATMEM_ENABLE
-	help
+	---help---
 	  This option allows you to change some of the ways that
 	  Linux manages its memory internally.  Most users will
 	  only have one option here: FLATMEM.  This is normal
@@ -34,7 +34,7 @@ config FLATMEM_MANUAL
 config DISCONTIGMEM_MANUAL
 	bool "Discontiguous Memory"
 	depends on ARCH_DISCONTIGMEM_ENABLE
-	help
+	---help---
 	  This option provides enhanced support for discontiguous
 	  memory systems, over FLATMEM.  These systems have holes
 	  in their physical address spaces, and this option provides
@@ -50,7 +50,7 @@ config DISCONTIGMEM_MANUAL
 config SPARSEMEM_MANUAL
 	bool "Sparse Memory"
 	depends on ARCH_SPARSEMEM_ENABLE
-	help
+	---help---
 	  This will be the only option for some systems, including
 	  memory hotplug systems.  This is normal.
 
@@ -122,7 +122,7 @@ config SPARSEMEM_VMEMMAP
 	bool "Sparse Memory virtual memmap"
 	depends on SPARSEMEM && SPARSEMEM_VMEMMAP_ENABLE
 	default y
-	help
+	---help---
 	 SPARSEMEM_VMEMMAP uses a virtually mapped memmap to optimise
 	 pfn_to_page and page_to_pfn operations.  This is the most
 	 efficient option when sufficient kernel resources are available.
@@ -170,7 +170,7 @@ config MEMORY_HOTPLUG_DEFAULT_ONLINE
         bool "Online the newly added memory blocks by default"
         default n
         depends on MEMORY_HOTPLUG
-        help
+        ---help---
 	  This option sets the default policy setting for memory hotplug
 	  onlining policy (/sys/devices/system/memory/auto_online_blocks) which
 	  determines what happens to newly added memory regions. Policy setting
@@ -187,7 +187,7 @@ config MEMORY_HOTPLUG_MOVABLE_NODE
         default n
         depends on MEMORY_HOTPLUG
         depends on QCOM_MEM_OFFLINE
-        help
+        ---help---
 	  When onlining memory blocks, this option helps to add the target
 	  memory block to ZONE_MOVABLE zone type. For successful offlining,
 	  these memory blocks should belong to 'ZONE_MOVABLE' since it carries
@@ -237,7 +237,7 @@ config BALLOON_COMPACTION
 	bool "Allow for balloon memory compaction/migration"
 	def_bool y
 	depends on COMPACTION && MEMORY_BALLOON
-	help
+	---help---
 	  Memory fragmentation introduced by ballooning might reduce
 	  significantly the number of 2MB contiguous memory blocks that can be
 	  used within a guest, thus imposing performance penalties associated
@@ -253,7 +253,7 @@ config COMPACTION
 	def_bool y
 	select MIGRATION
 	depends on MMU
-	help
+	---help---
           Compaction is the only memory management component to form
           high order (larger physically contiguous) memory blocks
           reliably. The page allocator relies on compaction heavily and
@@ -270,7 +270,7 @@ config MIGRATION
 	bool "Page migration"
 	def_bool y
 	depends on (NUMA || ARCH_ENABLE_MEMORY_HOTREMOVE || COMPACTION || CMA) && MMU
-	help
+	---help---
 	  Allows the migration of the physical location of pages of processes
 	  while the virtual addresses are not changed. This is useful in
 	  two situations. The first is on NUMA systems to put pages nearer
@@ -291,7 +291,7 @@ config BOUNCE
 	bool "Enable bounce buffers"
 	default y
 	depends on BLOCK && MMU && (ZONE_DMA || HIGHMEM)
-	help
+	---help---
 	  Enable bounce buffers for devices that cannot access
 	  the full range of memory available to the CPU. Enabled
 	  by default when ZONE_DMA or HIGHMEM is selected, but you
@@ -304,7 +304,7 @@ config NR_QUICK
 
 config VIRT_TO_BUS
 	bool
-	help
+	---help---
 	  An architecture should select this if it implements the
 	  deprecated interface virt_to_bus().  All new architectures
 	  should probably not select this.
@@ -317,7 +317,7 @@ config MMU_NOTIFIER
 config KSM
 	bool "Enable KSM for page merging"
 	depends on MMU
-	help
+	---help---
 	  Enable Kernel Samepage Merging: KSM periodically scans those areas
 	  of an application's address space that an app has advised may be
 	  mergeable.  When it finds pages of identical content, it replaces
@@ -652,6 +652,21 @@ config VMAP_LAZY_PURGING_FACTOR
 	  single attempt. For 32-bit in order to reduce fragmentation
 	  of vmalloc space, we decrease the default value to "8".
 
+config MM_EVENT_STAT
+	bool "Track per-process MM event"
+	depends on MMU
+	help
+	  This option enables per-process mm event stat(e.g., fault, reclaim,
+	  compaction and so on ) with some interval(Default is 0.5sec).
+	  Admin can see the stat from trace file via debugfs(e.g.,
+	  /sys/kernel/debug/tracing/trace)
+
+	  It includes max/average memory allocation latency for the interval
+	  as well as event count so that admin can see what happens in VM side
+	  (how many each event happens and how much processes spent time for
+	  the MM event). If it's too large, that would be not good situation.
+
+	  System can dump the trace into bugreport when user allows the dump.
 
 config GENERIC_EARLY_IOREMAP
 	bool
@@ -861,6 +876,7 @@ config PROCESS_RECLAIM
 
 	 Any other value is ignored.
 
+
 config DIRECT_SWAPPINESS
 	bool "direct swappiness"
 	default n
@@ -869,3 +885,13 @@ config DIRECT_SWAPPINESS
 	  echo ratio > proc/sys/vm/direct_swapiness  default_value 60
 	  cat /sys/module/memplus_core/parameters/memory_plus_enabled
 	  default_value 0
+
+config FORCE_ALLOC_FROM_DMA_ZONE
+	bool "Force certain memory allocators to always return ZONE_DMA32 memory"
+	depends on ZONE_DMA32
+	help
+	  Ensure certain memory allocators always return memory from ZONE_DMA32.
+	  This option helps ensure that clients who require ZONE_DMA32 memory are
+	  always using ZONE_DMA32 memory.
+
+	  If unsure, say "n".
