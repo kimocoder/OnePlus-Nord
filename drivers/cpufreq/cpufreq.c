@@ -38,8 +38,12 @@
 // 2020/04/01, add for pccore CONFIG_PCCORE
 #include <oneplus/control_center/control_center_helper.h>
 #include <oneplus/houston/houston_helper.h>
+#ifdef CONFIG_TPD
+#include <linux/oem/tpd.h>
+#endif
 #define GOLD_CPU_NUMBER 6
 #define GOLD_PLUS_CPU_NUMBER 7
+#include <linux/oem/cpufreq_bouncing.h>
 
 static LIST_HEAD(cpufreq_policy_list);
 
@@ -541,6 +545,8 @@ unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
 #ifdef CONFIG_PCCORE
 	unsigned int min_target;
 #endif
+	target_freq = cb_cap(policy, target_freq);
+
 #ifdef CONFIG_CONTROL_CENTER
 	if (likely(policy->cc_enable))
 		target_freq = clamp_val(target_freq, policy->cc_min, policy->cc_max);
@@ -1357,6 +1363,9 @@ static int cpufreq_online(unsigned int cpu)
 			per_cpu(cpufreq_cpu_data, j) = policy;
 			add_cpu_dev_symlink(policy, j);
 		}
+#ifdef CONFIG_TPD
+		tpd_init_policy(policy);
+#endif
 	} else {
 		policy->min = policy->user_policy.min;
 		policy->max = policy->user_policy.max;
@@ -1986,7 +1995,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
 					unsigned int target_freq)
 {
 	int ret;
-
+	target_freq = cb_cap(policy, target_freq);
 	target_freq = clamp_val(target_freq, policy->min, policy->max);
 
 	ret = cpufreq_driver->fast_switch(policy, target_freq);
